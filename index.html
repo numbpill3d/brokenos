@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORRUPTED_OS.exe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect x="0" y="0" width="12" height="12" fill="black" stroke="lime" stroke-width="1" opacity="0.8"/><rect x="4" y="4" width="12" height="12" fill="transparent" stroke="red" stroke-width="1" opacity="0.6" stroke-dasharray="2 1"/></svg>'), auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes staticEffect {
+            0% { background-position: 0% 0%; }
+            25% { background-position: 25% 100%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 75% 0%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            10% {
+                clip-path: polygon(5% 0, 95% 0, 95% 100%, 5% 100%);
+            }
+            20% {
+                transform: translate(-5px, 5px);
+                opacity: 0.8;
+            }
+            30% {
+                transform: translate(5px, -5px);
+                clip-path: polygon(0 10%, 100% 10%, 100% 90%, 0 90%);
+            }
+            40% {
+                transform: translate(5px, 5px);
+                filter: hue-rotate(90deg);
+            }
+            50% {
+                transform: translate(-5px, -5px);
+                clip-path: polygon(10% 0, 90% 0, 90% 100%, 10% 100%);
+                filter: invert(50%);
+            }
+            60% {
+                transform: translate(3px);
+                filter: saturate(200%);
+            }
+            70% {
+                transform: translate(0);
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                filter: none;
+            }
+            80% {
+                transform: skewX(10deg);
+                opacity: 0.9;
+            }
+            90% {
+                transform: skewX(-10deg);
+                filter: grayscale(100%);
+            }
+            100% {
+                transform: translate(0);
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                filter: none;
+            }
+        }
+
+        @keyframes textGlitch {
+            0% { transform: translate(0); }
+            10% { transform: translate(-2px, 2px); }
+            20% { transform: translate(2px, -2px); }
+            30% { transform: translate(0); }
+            40% { transform: translate(2px, 2px); }
+            50% { transform: translate(-2px, -2px); }
+            60% { transform: translate(0); }
+            70% { transform: translate(-1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+            90% { transform: translate(0); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            5% { opacity: 0.2; }
+            10% { opacity: 1; }
+            15% { opacity: 0.5; }
+            20% { opacity: 1; }
+            50% { opacity: 1; }
+            55% { opacity: 0.7; }
+            60% { opacity: 1; }
+            75% { opacity: 0.8; }
+            80% { opacity: 1; }
+            97% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(2deg); }
+            66% { transform: translateY(5px) rotate(-1deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        body {
+            background-color: #000;
+            color: #0f0;
+            overflow: hidden;
+            height: 100vh;
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(30, 30, 30, 0.2),
+                rgba(30, 30, 30, 0.2) 10px,
+                rgba(40, 40, 40, 0.2) 10px,
+                rgba(40, 40, 40, 0.2) 20px
+            );
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 100 100"><rect width="100" height="100" fill="black"/><g fill="white" fill-opacity="0.05"><rect x="0" y="0" width="1" height="1"/><rect x="10" y="5" width="1" height="1"/><rect x="20" y="10" width="1" height="1"/><rect x="30" y="15" width="1" height="1"/><rect x="40" y="20" width="1" height="1"/><rect x="50" y="25" width="1" height="1"/><rect x="60" y="30" width="1" height="1"/><rect x="70" y="35" width="1" height="1"/><rect x="80" y="40" width="1" height="1"/><rect x="90" y="45" width="1" height="1"/><rect x="0" y="50" width="1" height="1"/><rect x="10" y="55" width="1" height="1"/><rect x="20" y="60" width="1" height="1"/><rect x="30" y="65" width="1" height="1"/><rect x="40" y="70" width="1" height="1"/><rect x="50" y="75" width="1" height="1"/><rect x="60" y="80" width="1" height="1"/><rect x="70" y="85" width="1" height="1"/><rect x="80" y="90" width="1" height="1"/><rect x="90" y="95" width="1" height="1"/></g></svg>');
+            animation: staticEffect 8s linear infinite;
+            background-size: 300px 300px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .desktop {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+        }
+
+        .fullscreen-static {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.3;
+            animation: flicker 5s infinite;
+        }
+
+        .desktop-icons {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 24px;
+            z-index: 1;
+        }
+
+        .icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            position: relative;
+            padding: 5px;
+            animation: glitch 10s infinite;
+            animation-delay: calc(var(--i) * 1s);
+        }
+
+        .icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-img {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(50, 50, 50, 0.5);
+            margin-bottom: 5px;
+            color: #b3b3b3;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-img::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                transparent 50%,
+                rgba(255, 0, 0, 0.2) 50%,
+                rgba(255, 0, 0, 0.2)
+            );
+            background-size: 100% 4px;
+            z-index: 1;
+            animation: glitch 3s infinite;
+            opacity: 0.5;
+        }
+
+        .icon-text {
+            font-size: 12px;
+            color: #ddd;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+            animation: textGlitch 2s infinite;
+        }
+
+        .window {
+            position: absolute;
+            min-width: 320px;
+            max-width: 90vw;
+            min-height: 200px;
+            max-height: 80vh;
+            background-color: #1a1a1a;
+            border: 1px solid rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            transform-origin: center;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .window::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 0, 0.03) 2px,
+                rgba(0, 255, 0, 0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        .window.active {
+            z-index: 3;
+        }
+
+        .window-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #252525;
+            padding: 5px 10px;
+            color: #ddd;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+            cursor: move;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window-title::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 0, 0, 0.1) 45%,
+                transparent 55%
+            );
+            animation: glitch 3s infinite;
+            pointer-events: none;
+        }
+
+        .window-title-text {
+            animation: textGlitch 3s infinite;
+        }
+
+        .window-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .window-button {
+            width: 16px;
+            height: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            color: #ddd;
+            cursor: pointer;
+            background-color: rgba(50, 50, 50, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window-button::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 0, 0, 0.2),
+                transparent
+            );
+            transform: translateX(-100%);
+            animation: glitch 2s infinite;
+        }
+
+        .window-content {
+            flex: 1;
+            padding: 10px;
+            position: relative;
+            overflow: auto;
+            color: #b3b3b3;
+            font-size: 13px;
+            line-height: 1.4;
+            background-color: rgba(30, 30, 30, 0.9);
+        }
+
+        .window-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                transparent 80%,
+                rgba(0, 255, 0, 0.1) 80%,
+                rgba(0, 255, 0, 0.1)
+            );
+            background-size: 10px 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .error-text {
+            color: #f00;
+            animation: textGlitch 2s infinite;
+        }
+
+        .corrupted-text {
+            display: inline-block;
+            color: #0f0;
+            animation: textGlitch 3s infinite;
+        }
+
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-top: 1px solid rgba(0, 255, 0, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 100;
+            justify-content: space-between;
+            backdrop-filter: blur(5px);
+        }
+
+        .start-button {
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            height: 30px;
+            background-color: rgba(50, 50, 50, 0.8);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #ddd;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                transparent 90%,
+                rgba(255, 0, 0, 0.2) 90%,
+                rgba(255, 0, 0, 0.2)
+            );
+            background-size: 100% 4px;
+            z-index: 1;
+            animation: glitch 3s infinite;
+            opacity: 0.5;
+        }
+
+        .taskbar-items {
+            display: flex;
+            flex: 1;
+            margin-left: 10px;
+            gap: 5px;
+            overflow-x: auto;
+            max-width: calc(100% - 200px);
+        }
+
+        .taskbar-item {
+            padding: 0 10px;
+            height: 30px;
+            background-color: rgba(40, 40, 40, 0.8);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            color: #ddd;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            min-width: 120px;
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .taskbar-item.active {
+            background-color: rgba(50, 50, 50, 0.8);
+            border-color: rgba(0, 255, 0, 0.5);
+        }
+
+        .taskbar-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(0, 255, 0, 0.1),
+                transparent
+            );
+            transform: translateX(-100%);
+            animation: glitch 5s infinite;
+            opacity: 0.5;
+        }
+
+        .clock {
+            font-size: 12px;
+            color: #ddd;
+            padding: 0 10px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(40, 40, 40, 0.8);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            animation: textGlitch 5s infinite;
+        }
+
+        .floating-error {
+            position: fixed;
+            padding: 10px 15px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            color: #f00;
+            font-size: 14px;
+            z-index: 1000;
+            pointer-events: none;
+            animation: float 8s ease-in-out infinite, glitch 10s infinite;
+            text-shadow: 0 0 5px #f00, 0 0 10px #f00;
+            max-width: 300px;
+        }
+
+        .static-block {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="black"/><g fill="white" fill-opacity="0.3"><rect x="10" y="10" width="2" height="2"/><rect x="30" y="15" width="2" height="2"/><rect x="50" y="20" width="2" height="2"/><rect x="70" y="25" width="2" height="2"/><rect x="90" y="30" width="2" height="2"/><rect x="20" y="40" width="2" height="2"/><rect x="40" y="45" width="2" height="2"/><rect x="60" y="50" width="2" height="2"/><rect x="80" y="55" width="2" height="2"/><rect x="15" y="65" width="2" height="2"/><rect x="35" y="70" width="2" height="2"/><rect x="55" y="75" width="2" height="2"/><rect x="75" y="80" width="2" height="2"/><rect x="95" y="85" width="2" height="2"/></g></svg>');
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0.7;
+            animation: float 10s ease-in-out infinite, flicker 3s infinite;
+        }
+
+        .blue-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0000aa;
+            color: #ffffff;
+            font-family: monospace;
+            padding: 50px;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blue-screen h1 {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .blue-screen-text {
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background-color: #fff;
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+        }
+
+        .console-text {
+            white-space: pre-wrap;
+            word-break: break-all;
+            animation: textGlitch 3s infinite;
+        }
+
+        .dragging {
+            opacity: 0.8;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+
+        .reveal-glitch {
+            position: absolute;
+            background: linear-gradient(
+                135deg, 
+                rgba(255, 0, 0, 0.3), 
+                rgba(0, 255, 0, 0.3), 
+                rgba(0, 0, 255, 0.3)
+            );
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0.7;
+            animation: glitch 3s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-icons {
+                gap: 15px;
+            }
+            
+            .icon {
+                width: 60px;
+            }
+            
+            .taskbar-items {
+                max-width: calc(100% - 120px);
+            }
+            
+            .window {
+                min-width: 270px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .desktop-icons {
+                gap: 10px;
+            }
+            
+            .icon {
+                width: 50px;
+            }
+            
+            .icon-img {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .taskbar-items {
+                max-width: calc(100% - 100px);
+            }
+            
+            .start-button {
+                padding: 0 10px;
+            }
+            
+            .window {
+                min-width: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+        <div class="fullscreen-static"></div>
+        
+        <div class="desktop-icons">
+            <div class="icon" style="--i: 0" ondblclick="openWindow('file-explorer')">
+                <div class="icon-img">[x]</div>
+                <div class="icon-text">My F1l3s</div>
+            </div>
+            <div class="icon" style="--i: 1" ondblclick="openWindow('error-log')">
+                <div class="icon-img">[!]</div>
+                <div class="icon-text">ERROR.log</div>
+            </div>
+            <div class="icon" style="--i: 2" ondblclick="openWindow('terminal')">
+                <div class="icon-img">[>]</div>
+                <div class="icon-text">Termi%al</div>
+            </div>
+            <div class="icon" style="--i: 3" ondblclick="openWindow('corrupted')">
+                <div class="icon-img">[?]</div>
+                <div class="icon-text">C0RRUPT.exe</div>
+            </div>
+            <div class="icon" style="--i: 4" ondblclick="triggerBlueScreen()">
+                <div class="icon-img">[#]</div>
+                <div class="icon-text">SYS32.dll</div>
+            </div>
+        </div>
+        
+        <div class="taskbar">
+            <div class="start-button" onclick="showFloatingError('The system cannot access the START menu at this time. Error code: 0xF1D7B3A9')">
+                START
+            </div>
+            <div class="taskbar-items" id="taskbar-items">
+                <!-- Taskbar items will be added dynamically -->
+            </div>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </div>
+
+    <!-- Templates for windows -->
+    <template id="window-template">
+        <div class="window" style="top: 100px; left: 100px;">
+            <div class="window-title">
+                <div class="window-title-text">Window Title</div>
+                <div class="window-buttons">
+                    <div class="window-button" onclick="minimizeWindow(this.closest('.window'))">-</div>
+                    <div class="window-button" onclick="closeWindow(this.closest('.window'))">x</div>
+                </div>
+            </div>
+            <div class="window-content"></div>
+        </div>
+    </template>
+
+    <!-- Template contents for different windows -->
+    <template id="file-explorer-content">
+        <div style="height: 100%;">
+            <div style="display: flex; margin-bottom: 10px;">
+                <div style="flex: 1; background-color: rgba(50, 50, 50, 0.5); padding: 5px; border: 1px solid rgba(0, 255, 0, 0.2);">
+                    C:/Users/Admin> <span class="blink">_</span>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid rgba(0, 255, 0, 0.1);">
+                    <span>Name</span>
+                    <span>Size</span>
+                    <span>Status</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid rgba(0, 255, 0, 0.1);">
+                    <span class="corrupted-text">Documents</span>
+                    <span>FOLDER</span>
+                    <span class="error-text">INACCES$IBLE</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid rgba(0, 255, 0, 0.1);">
+                    <span class="corrupted-text">Downloads</span>
+                    <span>FOLDER</span>
+                    <span>OK</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid rgba(0, 255, 0, 0.1);">
+                    <span class="corrupted-text">report_Q1.xlsx</span>
+                    <span>2.3 MB</span>
+                    <span class="error-text">CORRUP7ED</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid rgba(0, 255, 0, 0.1);">
+                    <span class="corrupted-text">backup_2023.zip</span>
+                    <span>245 MB</span>
+                    <span>OK</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid rgba(0, 255, 0, 0.1);">
+                    <span class="corrupted-text">system.log</span>
+                    <span>1.7 MB</span>
+                    <span class="error-text">LOCKED</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid rgba(0, 255, 0, 0.1);">
+                    <span class="corrupted-text">?\\\\&*!.dat</span>
+                    <span>ERROR</span>
+                    <span class="error-text">UNKN0WN</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="error-log-content">
+        <div class="console-text">
+[SYS] Boot sequence initiated...
+[ERROR] Memory allocation failed at 0xF7AC301D
+[SYS] Attempting recovery...
+[ERROR] File system integrity check failed
+[SYS] 237 corrupted sectors detected
+[WARNING] Security protocols compromised
+[ERROR] Network stack initialization failed
+[SYS] Applying emergency patches...
+[ERROR] Registry hive corrupted at HKLM\SYSTEM\CurrentControlSet
+[WARNING] Multiple driver signatures invalid
+[SYS] Kernel panic avoided - fallback mode engaged
+[ERROR] Graphics subsystem reporting anomalies
+[WARNING] Unauthorized memory access at 0x7FFE0300
+[ERROR] UI compositor encountered fatal exception
+[SYS] Attempting to stabilize display driver...
+[ERROR] Critical system files missing or corrupted
+[WARNING] Hardware monitoring system offline
+[SYS] Operating in degraded state
+[ERROR] Authentication service unavailable
+[WARNING] Data integrity cannot be guaranteed
+[ERROR] Exception 0x0000008E at 0xF783A1C2
+[SYS] Emergency logging enabled
+[ERROR] Unknown device detected on system bus
+[WARNING] Multiple security breaches detected
+[ERROR] System stability at critical levels
+[SYS] Recovery attempts: 7, Success rate: 14%
+        </div>
+    </template>
+
+    <template id="terminal-content">
+        <div style="font-family: 'Courier New', monospace; color: #0f0; height: 100%;" class="console-text">
+C:/> sfc /scannow
+
+Verifying system integrity...
+[=========          ] 32% compl-te
+
+ERROR: S-stem file corrupti-n detected
+ERROR: Rep-ir action failed
+ERROR: Critical files unrec-verable
+
+C:/> chkdsk /f
+
+Checking disk for -rrors...
+Stage 1: Examining b-sic file system structure...
+Stage 2: Ex-mining file name link-ges...
+ERROR: Unrecov-rable error detected at sect-r 0x1F7B3D4A
+
+C:/> mem-diag
+
+DiagnosticsError: C-nnot initialize memory sc-nning module
+RequiredComponent: MEMORY.SYS is corrupt or missing.
+Attempting to continue with minimal functionality...
+
+C:/> recov-r
+
+Unknown command or program: recov-r
+
+C:/> <span class="blink">_</span>
+        </div>
+    </template>
+
+    <template id="corrupted-content">
+        <div style="display: flex; flex-direction: column; height: 100%; gap: 10px;">
+            <div style="background-color: rgba(50, 50, 50, 0.5); padding: 10px; border: 1px solid rgba(255, 0, 0, 0.3);">
+                <span class="error-text">WARNING: This file appears to be corrupted or incomplete. Opening may cause further system instability.</span>
+            </div>
+            <div style="flex: 1; overflow: hidden; position: relative; border: 1px solid rgba(255, 0, 0, 0.3);">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; font-family: monospace; font-size: 10px; overflow: hidden; padding: 5px; color: #ccc;" class="corrupted-text">
+                    01001001 01101110 01100011 01101001 01100100 01100101 01101110 01110100 
+                    00100000 01010010 01100101 01110000 01101111 01110010 01110100 00111010 
+                    00100000 01010011 01111001 01110011 01110100 01100101 01101101 00100000 
+                    01000110 01100001 01101001 01101100 01110101 01110010 01100101 00001010 
+                    00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 
+                    00101101 00101101 00101101 00101101 00101101 00101101 00101101 00101101 
+                    00101101 00101101 00101101 00001010 01000100 01100001 01110100 01100101 
+                    00111010 00100000 11000001 11110011 01110100 01100101 01101110 01100100 
+                    01100001 01110100 01100101 00001010 01010100 01101001 01101101 01100101 
+                    00111010 00100000 00101111 01011100 01011111 00101111 00100000 00001010 
+                    01001100 01101111 01100011 01100001 01110100 01101001 01101111 01101110 
+                    00111010 00100000 01010011 01100101 01100011 01110100 01101111 01110010 
+                    00100000 00110111 00001010 00001010 01000100 01100101 01110011 01100011 
+                    01110010 01101001 01110000 01110100 01101001 01101111 01101110 00111010 
+                    00100000 01010100 01101000 01100101 00100000 01110011 01111001 01110011 
+                    01110100 01100101 01101101 00100000 01100101 01111000 01110000 01100101 
+                    01110010 01101001 01100101 01101110 01100011 01100101 01100100 00100000 
+                    01100001 00100000 01100011 01100001 01110100 01100001 01110011 01110100 
+                    01110010 01101111 01110000 01101000 01101001 01100011 00100000 01100110 
+                    01100001 01101001 01101100 01110101 01110010 01100101 00100000 01110111 
+                    01101000 01100101 01101110 00100000 11010000 10101111 11010001 10000010 
+                    11010011 10000000 11010001 10000001 11010000 10111110 11010001 10000010 
+                    11010000 10111000 11010000 10111111 00100000 01100001 01110100 01110100 
+                    01100101 01101101 01110000 01110100 01100101 01100100 00100000 01110100 
+                    01101111 00100000 01100001 01100011 01100011 01100101 01110011 01110011 
+                    00100000 01110000 01110010 01101111 01110100 01100101 01100011 01110100 
+                    01100101 01100100 00100000 01101101 01100101 01101101 01101111 01110010 
+                    01111001 00100000 01110010 01100101 01100111 01101001 01101111 01101110 
+                    01110011 00101110 00100000 01010100 01101000 01100101 00100000 01100011 
+                    01101111 01110010 01110010 01110101 01110000 01110100 01101001 01101111 
+                    01101110 00100000 01110011 01110000 01110010 01100101 01100001 01100100 
+                    00100000 01110100 01101111 00100000 01100011 01110010 01101001 01110100 
+                    01101001 01100011 01100001 01101100 00100000 01110011 01111001 01110011 
+                    01110100 01100101 01101101 00100000 01100110 01101001 01101100 01100101 
+                    01110011 00101100 00100000 01100011 01100001 01110101 01110011 01101001 
+                    01101110 01100111 00100000 01100001 00100000 01100011 01100001 01110011 
+                    01100011 01100001 01100100 01101001 01101110 01100111 00100000 01100110 
+                    01100001 01101001 01101100 01110101 01110010 01100101 00100000 01101001 
+                    01101110 00100000 01101101 01110101 01101100 01110100 01101001 01110000 
+                    01101100 01100101 00100000 01110011 01110101 01100010 01110011 01111001 
+                    01110011 01110100 01100101 01101101 01110011 00101110
+                </div>
+            </div>
+            <button onclick="showFloatingError('Attempted to execute corrupted file. Memory violation at address 0xFFF8A3D2. System stability compromised.')" style="background-color: rgba(50, 50, 50, 0.8); color: #ddd; border: 1px solid rgba(255, 0, 0, 0.3); padding: 8px; position: relative; overflow: hidden;">
+                <span style="position: relative; z-index: 1;">Attempt Recovery</span>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, transparent, rgba(255, 0, 0, 0.2), transparent); animation: glitch 2s infinite;"></div>
+            </button>
+        </div>
+    </template>
+
+    <div class="blue-screen" id="blue-screen">
+        <h1>SYSTEM FAILURE</h1>
+        <div class="blue-screen-text">
+            <p>A fatal exception 0xD34DB33F has occurred at 0xC0001234 in VXD SYST(01) + 0x0000ABCD.</p>
+            <p>The current application will be terminated.</p>
+            <p>* Press any key to terminate the current application.</p>
+            <p>* Press CTRL+ALT+DEL to restart your computer. You will lose any unsaved information in all applications.</p>
+            <br>
+            <p>Technical information:</p>
+            <p>*** STOP: 0x0000000A (0xF78D2524, 0x00000002, 0x00000000, 0x8054017A)</p>
+            <p>IRQL_NOT_LESS_OR_EQUAL</p>
+            <br>
+            <p>Beginning memory dump...</p>
+            <p>Physical memory dump complete.</p>
+            <p>Contact your system administrator or technical support for further assistance.</p>
+        </div>
+    </div>
+
+    <script>
+        // Array to store active windows and their corresponding taskbar items
+        let activeWindows = [];
+        let windowZ = 100;
+        let revealGlitches = [];
+
+        // Initialize with some floating static and error messages
+        window.addEventListener('load', function() {
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            setTimeout(() => {
+                showFloatingError('WARNING: System files compromised. Backup recommended.');
+            }, 3000);
+            
+            setTimeout(() => {
+                showFloatingError('ERROR: Memory allocation failed at address 0xF7A3B291');
+            }, 8000);
+            
+            // Create some floating static blocks
+            for (let i = 0; i < 3; i++) {
+                createStaticBlock();
+            }
+            
+            // Open a window automatically
+            setTimeout(() => {
+                openWindow('error-log');
+            }, 1500);
+        });
+
+        // Clock update function
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            
+            // Randomly glitch the time
+            if (Math.random() < 0.1) {
+                hours = Math.floor(Math.random() * 24);
+                minutes = Math.floor(Math.random() * 60);
+                seconds = Math.floor(Math.random() * 60);
+            }
+            
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Function to create a static block
+        function createStaticBlock() {
+            const staticBlock = document.createElement('div');
+            staticBlock.className = 'static-block';
+            
+            // Random position
+            const left = Math.random() * (window.innerWidth - 100);
+            const top = Math.random() * (window.innerHeight - 100);
+            
+            staticBlock.style.left = `${left}px`;
+            staticBlock.style.top = `${top}px`;
+            
+            document.body.appendChild(staticBlock);
+            
+            // Self-destruct after a random time
+            setTimeout(() => {
+                if (staticBlock.parentNode) {
+                    staticBlock.parentNode.removeChild(staticBlock);
+                    if (Math.random() < 0.7) {
+                        createStaticBlock(); // Create a new one
+                    }
+                }
+            }, 5000 + Math.random() * 10000);
+        }
+
+        // Function to show floating error
+        function showFloatingError(message) {
+            const error = document.createElement('div');
+            error.className = 'floating-error';
+            error.textContent = message;
+            
+            // Random position
+            const left = 50 + Math.random() * (window.innerWidth - 350);
+            const top = 50 + Math.random() * (window.innerHeight - 150);
+            
+            error.style.left = `${left}px`;
+            error.style.top = `${top}px`;
+            
+            document.body.appendChild(error);
+            
+            // Remove after some time
+            setTimeout(() => {
+                if (error.parentNode) {
+                    error.parentNode.removeChild(error);
+                }
+            }, 5000 + Math.random() * 3000);
+        }
+
+        // Function to open a window
+        function openWindow(type) {
+            // Check if this window type is already open
+            const existingWindow = activeWindows.find(w => w.type === type);
+            if (existingWindow) {
+                // Just bring it to front
+                activateWindow(existingWindow.window);
+                return;
+            }
+
+            // Clone the window template
+            const template = document.getElementById('window-template');
+            const windowElement = template.content.cloneNode(true).querySelector('.window');
+            
+            // Set window position with some randomization
+            const baseTop = 70 + Math.random() * 30;
+            const baseLeft = 100 + Math.random() * 50;
+            windowElement.style.top = `${baseTop}px`;
+            windowElement.style.left = `${baseLeft}px`;
+            windowElement.style.zIndex = windowZ++;
+            
+            // Set window title and content based on type
+            const titleElement = windowElement.querySelector('.window-title-text');
+            const contentElement = windowElement.querySelector('.window-content');
+            
+            let title = '';
+            switch (type) {
+                case 'file-explorer':
+                    title = 'File Expl0rer';
+                    contentElement.appendChild(document.getElementById('file-explorer-content').content.cloneNode(true));
+                    break;
+                case 'error-log':
+                    title = 'System Error Log';
+                    contentElement.appendChild(document.getElementById('error-log-content').content.cloneNode(true));
+                    break;
+                case 'terminal':
+                    title = 'C0mmand Pr0mpt';
+                    contentElement.appendChild(document.getElementById('terminal-content').content.cloneNode(true));
+                    break;
+                case 'corrupted':
+                    title = 'C0RRUPT.exe';
+                    contentElement.appendChild(document.getElementById('corrupted-content').content.cloneNode(true));
+                    break;
+                default:
+                    title = 'Unk#own Wind0w';
+                    contentElement.textContent = 'Error: Content not found.';
+            }
+            
+            titleElement.textContent = title;
+            
+            // Add the window to the document
+            document.body.appendChild(windowElement);
+            
+            // Make window draggable
+            makeWindowDraggable(windowElement);
+            
+            // Add to taskbar
+            addTaskbarItem(windowElement, title, type);
+            
+            // Activate the window
+            activateWindow(windowElement);
+            
+            // Randomly glitch the window
+            if (Math.random() < 0.5) {
+                setTimeout(() => {
+                    windowElement.style.transform = `skew(${Math.random() * 2 - 1}deg, ${Math.random() * 2 - 1}deg)`;
+                }, 500 + Math.random() * 1000);
+            }
+            
+            // Return the window element in case we need it
+            return windowElement;
+        }
+
+        // Function to make window draggable
+        function makeWindowDraggable(windowElement) {
+            const titleBar = windowElement.querySelector('.window-title');
+            let isDragging = false;
+            let offsetX, offsetY;
+            let dragTimeout;
+            let revealGlitchTimeout;
+            
+            titleBar.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - windowElement.getBoundingClientRect().left;
+                offsetY = e.clientY - windowElement.getBoundingClientRect().top;
+                windowElement.classList.add('dragging');
+                
+                // Clear any existing timeouts
+                clearTimeout(dragTimeout);
+                clearTimeout(revealGlitchTimeout);
+                
+                // Activate the window
+                activateWindow(windowElement);
+                
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const left = e.clientX - offsetX;
+                    const top = e.clientY - offsetY;
+                    
+                    windowElement.style.left = `${left}px`;
+                    windowElement.style.top = `${top}px`;
+                    
+                    // Create reveal glitch effect
+                    clearTimeout(revealGlitchTimeout);
+                    revealGlitchTimeout = setTimeout(() => {
+                        createRevealGlitch(e.clientX, e.clientY);
+                    }, 50);
+                }
+            });
+            
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    
+                    // Keep the dragging effect a bit longer to simulate lag
+                    dragTimeout = setTimeout(() => {
+                        windowElement.classList.remove('dragging');
+                    }, 100 + Math.random() * 200);
+                }
+            });
+            
+            // Double click to maximize (but make it glitchy)
+            titleBar.addEventListener('dblclick', () => {
+                const isMaximized = windowElement.style.width === '90vw';
+                
+                if (isMaximized) {
+                    windowElement.style.width = '';
+                    windowElement.style.height = '';
+                    windowElement.style.top = `${70 + Math.random() * 30}px`;
+                    windowElement.style.left = `${100 + Math.random() * 50}px`;
+                } else {
+                    // Maximize with slight offset to look glitchy
+                    windowElement.style.width = '90vw';
+                    windowElement.style.height = '75vh';
+                    windowElement.style.top = `${10 + Math.random() * 5}px`;
+                    windowElement.style.left = `${5 + Math.random() * 5}px`;
+                }
+                
+                // Simulate a glitch when maximizing/restoring
+                windowElement.style.transform = `skew(${Math.random() * 2 - 1}deg, ${Math.random() * 2 - 1}deg)`;
+                setTimeout(() => {
+                    windowElement.style.transform = '';
+                }, 300);
+            });
+        }
+
+        // Function to create glitch trail effect when dragging
+        function createRevealGlitch(x, y) {
+            // Random size
+            const width = 20 + Math.random() * 60;
+            const height = 20 + Math.random() * 60;
+            
+            // Position centered on mouse but with some random offset
+            const left = x - width / 2 + (Math.random() * 20 - 10);
+            const top = y - height / 2 + (Math.random() * 20 - 10);
+            
+            const glitch = document.createElement('div');
+            glitch.className = 'reveal-glitch';
+            glitch.style.width = `${width}px`;
+            glitch.style.height = `${height}px`;
+            glitch.style.left = `${left}px`;
+            glitch.style.top = `${top}px`;
+            
+            document.body.appendChild(glitch);
+            revealGlitches.push(glitch);
+            
+            // Remove after a short delay
+            setTimeout(() => {
+                if (glitch.parentNode) {
+                    glitch.parentNode.removeChild(glitch);
+                    revealGlitches = revealGlitches.filter(g => g !== glitch);
+                }
+            }, 300 + Math.random() * 500);
+        }
+
+        // Function to add taskbar item
+        function addTaskbarItem(windowElement, title, type) {
+            const taskbarItems = document.getElementById('taskbar-items');
+            const item = document.createElement('div');
+            item.className = 'taskbar-item';
+            item.textContent = title;
+            
+            // Click to activate/minimize
+            item.addEventListener('click', () => {
+                const isMinimized = windowElement.style.display === 'none';
+                
+                if (isMinimized) {
+                    // Restore
+                    windowElement.style.display = 'flex';
+                    activateWindow(windowElement);
+                } else {
+                    // Check if it's already active
+                    const isActive = windowElement.classList.contains('active');
+                    
+                    if (isActive) {
+                        // Minimize
+                        windowElement.style.display = 'none';
+                        item.classList.remove('active');
+                    } else {
+                        // Activate
+                        activateWindow(windowElement);
+                    }
+                }
+            });
+            
+            taskbarItems.appendChild(item);
+            
+            // Store reference to window and taskbar item
+            activeWindows.push({
+                window: windowElement,
+                taskbarItem: item,
+                type: type
+            });
+        }
+
+        // Function to activate a window (bring to front)
+        function activateWindow(windowElement) {
+            // Deactivate all windows
+            activeWindows.forEach(w => {
+                w.window.classList.remove('active');
+                w.taskbarItem.classList.remove('active');
+            });
+            
+            // Activate this window
+            windowElement.classList.add('active');
+            windowElement.style.zIndex = windowZ++;
+            
+            // Find and activate the corresponding taskbar item
+            const windowInfo = activeWindows.find(w => w.window === windowElement);
+            if (windowInfo) {
+                windowInfo.taskbarItem.classList.add('active');
+            }
+        }
+
+        // Function to minimize a window
+        function minimizeWindow(windowElement) {
+            windowElement.style.display = 'none';
+            
+            // Find and deactivate the corresponding taskbar item
+            const windowInfo = activeWindows.find(w => w.window === windowElement);
+            if (windowInfo) {
+                windowInfo.taskbarItem.classList.remove('active');
+            }
+        }
+
+        // Function to close a window
+        function closeWindow(windowElement) {
+            // Remove from activeWindows array
+            const index = activeWindows.findIndex(w => w.window === windowElement);
+            if (index !== -1) {
+                const windowInfo = activeWindows[index];
+                
+                // Remove taskbar item
+                if (windowInfo.taskbarItem.parentNode) {
+                    windowInfo.taskbarItem.parentNode.removeChild(windowInfo.taskbarItem);
+                }
+                
+                // Remove window
+                if (windowElement.parentNode) {
+                    windowElement.parentNode.removeChild(windowElement);
+                }
+                
+                // Remove from array
+                activeWindows.splice(index, 1);
+            }
+            
+            // Sometimes show an error message after closing
+            if (Math.random() < 0.3) {
+                setTimeout(() => {
+                    showFloatingError('ERROR: Process termination incomplete. Ghost threads detected.');
+                }, 500);
+            }
+        }
+
+        // Function to trigger blue screen
+        function triggerBlueScreen() {
+            const blueScreen = document.getElementById('blue-screen');
+            blueScreen.style.display = 'flex';
+            
+            // Add click handler to dismiss
+            blueScreen.addEventListener('click', () => {
+                blueScreen.style.display = 'none';
+                
+                // Show recovery message
+                setTimeout(() => {
+                    showFloatingError('Critical system recovery attempt successful. Operating in safe mode.');
+                }, 500);
+                
+                // Open error log
+                setTimeout(() => {
+                    openWindow('error-log');
+                }, 2000);
+            });
+        }
+
+        // Add touch support for mobile devices
+        document.addEventListener('DOMContentLoaded', () => {
+            // Map touch events to mouse events for dragging windows
+            function mapTouchEvent(touch) {
+                return {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    preventDefault: () => {}
+                };
+            }
+            
+            document.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                const element = document.elementFromPoint(touch.clientX, touch.clientY);
+                
+                if (element && element.closest('.window-title')) {
+                    const mouseEvent = mapTouchEvent(touch);
+                    element.closest('.window-title').dispatchEvent(new MouseEvent('mousedown', mouseEvent));
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    const mouseEvent = mapTouchEvent(e.touches[0]);
+                    const mouseMoveEvent = new MouseEvent('mousemove', mouseEvent);
+                    document.dispatchEvent(mouseMoveEvent);
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('touchend', () => {
+                document.dispatchEvent(new MouseEvent('mouseup'));
+            });
+        });
+    </script>
+</body>
+</html>
